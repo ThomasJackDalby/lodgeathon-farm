@@ -1,4 +1,4 @@
-from sqlmodel import Field, Session, SQLModel, create_engine, select
+from sqlmodel import Field, SQLModel
 
 class FarmerBase(SQLModel):
     name: str = Field()
@@ -17,3 +17,16 @@ class FarmerPublic(SQLModel):
     name: str
     x : int
     y : int
+
+class FarmerCommand(SQLModel):
+    type: str
+
+class MoveCommand(FarmerCommand):
+    direction: str
+
+class OtherCommand(FarmerCommand):
+    stuff: str
+
+class FarmerUpdate(SQLModel):
+    token: str
+    commands: list[MoveCommand | OtherCommand]
