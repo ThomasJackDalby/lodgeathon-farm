@@ -24,6 +24,7 @@ class Game:
         self.settings = Settings()
         self.farmers = {}
         self.plants = []
+        self.next_state_update = 0
 
         self.screen = pygame.display.set_mode(
                 (self.settings.screen_width, self.settings.screen_height))
@@ -44,6 +45,11 @@ class Game:
             self._update_screen()
 
     def _get_state(self):
+
+        self.next_state_update -= 1
+        if self.next_state_update > 0: return
+        self.next_state_update = 30
+
         farmers_json = requests.get("http://localhost:8000/farmers").json()
         for farmer_json in farmers_json:
             farmer = self.farmers.get(farmer_json["id"], None)
