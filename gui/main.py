@@ -1,8 +1,9 @@
 """Chess game, for learning to grab images from a sprite sheet."""
 
 import sys
+import requests
 from spritesheet import SpriteSheet
-from player import Player
+from player import Farmer
 
 import pygame
 
@@ -21,22 +22,36 @@ class Game:
         """Initialize the game, and create resources."""
         pygame.init()
         self.settings = Settings()
-        self.player_list = []
+        self.farmers = {}
+        self.plants = []
 
         self.screen = pygame.display.set_mode(
                 (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("my game")
+        self.sprites = SpriteSheet("sprites.bmp")
 
-        self.sprites = SpriteSheet("tmw_desert_spacing.png")
-        player_sprite = self.sprites.image_at( (0,0,32,32) )
-        self.player_list.append(Player(self, player_sprite))
+    def add_farmer(self, id):
+        player_sprite = self.sprites.image_at((0,0,32,32) )
+        farmer = Farmer(id, self, player_sprite)
+        self.farmers[id] = farmer
+        return farmer
 
     def run_game(self):
         """Start the main loop for the game."""
         while True:
             self._check_events()
-            #self._get_state()
+            self._get_state()
             self._update_screen()
+
+    def _get_state(self):
+        farmers_json = requests.get("http://localhost:8000/farmers").json()
+        for farmer_json in farmers_json:
+            farmer = self.farmers.get(farmer_json["id"], None)
+            if farmer is None:
+                farmer = self.add_farmer(farmer_json["id"])
+
+            farmer.x = farmer_json["x"]
+            farmer.y = farmer_json["y"]
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -46,17 +61,17 @@ class Game:
                 if event.key == pygame.K_q:
                     sys.exit()
                 elif event.key == pygame.K_UP:
-                    self.player_list[0].move(-1,0)
+                    self.farmers[0].move(-1,0)
                 elif event.key == pygame.K_DOWN:
-                    self.player_list[0].move(1,0)
+                    self.farmers[0].move(1,0)
                 elif event.key == pygame.K_LEFT:
-                    self.player_list[0].move(0,-1)
+                    self.farmers[0].move(0,-1)
                 elif event.key == pygame.K_RIGHT:
-                    self.player_list[0].move(0,1)
+                    self.farmers[0].move(0,1)
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
-        for player in self.player_list:
+        for player in self.farmers.values():
             player.blitme()
         pygame.display.flip()
 

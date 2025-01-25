@@ -1,9 +1,9 @@
-class Player:
-    def __init__(self, game, sprite):
+class Farmer:
+    def __init__(self, id, game, sprite):
+        self.id = id
         self.image = sprite
         self.name = ''
         self.color = ''
-
         self.screen = game.screen
 
         # Start at the top left corner.
