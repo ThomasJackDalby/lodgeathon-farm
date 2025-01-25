@@ -19,10 +19,10 @@ class SpriteSheet:
         rect = pygame.Rect(rectangle)
         image = pygame.Surface(rect.size).convert()
         image.blit(self.sheet, (0, 0), rect)
-        if colorkey is not None:
-            if colorkey is -1:
-                colorkey = image.get_at((0,0))
-            image.set_colorkey(colorkey, pygame.RLEACCEL)
+        colorkey = image.get_at((0,0))
+        # if colorkey is not None:
+        #     if colorkey is -1:
+        image.set_colorkey(colorkey, pygame.RLEACCEL)
         return image
 
     def images_at(self, rects, colorkey = None):

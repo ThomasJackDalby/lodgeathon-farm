@@ -10,7 +10,7 @@ class Settings:
 
     def __init__(self):
         self.screen_width, self.screen_height = 1200, 800
-        self.bg_color = (225, 225, 225)
+        self.bg_color = (94, 173, 54)
 
 class Game:
 
@@ -24,6 +24,7 @@ class Game:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Lodgeathon!")
         self.sprites = SpriteSheet("sprites.bmp")
+        self.carrot = SpriteSheet("images/carrot.png")
 
     def add_farmer(self, id, x, y):
         player_sprite = self.sprites.image_at((0,0,32,32) )
@@ -32,7 +33,7 @@ class Game:
         return farmer
     
     def add_plant(self, id, x, y):
-        plant_sprite = self.sprites.image_at((0,0,32,32) )
+        plant_sprite = self.carrot.image_at((0,5*32,32,32) )
         plant = Plant(id, x, y, plant_sprite)
         self.plants[id] = plant
         return plant
