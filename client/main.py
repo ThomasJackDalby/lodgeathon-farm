@@ -2,18 +2,21 @@
 
 import requests
 
-response = requests.post("http://localhost:8000/farmers/1", json={
-    "token" : "abcde",
-    "commands" : [
-        { 
-            "type" : "move",
-            "direction" : "left"
-        },
-        { 
-            "type" : "other",
-            "stuff" : "what"
-        }
-    ]
+URL = "http://localhost:8000"
+
+FARMER_ID = 1
+FARMER_TOKEN = "abcde"
+
+def move(direction):
+    requests.post(URL+"/farmers/"+str(FARMER_ID), json={
+        "token" : FARMER_TOKEN,
+        "commands" : [
+            { 
+                "type" : "move",
+                "direction" : direction
+            }
+        ]
 })
 
-print(response.json())
+if __name__ == "__main__":
+    move("left")

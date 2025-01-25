@@ -24,9 +24,15 @@ class FarmerCommand(SQLModel):
 class MoveCommand(FarmerCommand):
     direction: str
 
-class OtherCommand(FarmerCommand):
+    def action(self, farmer):
+        farmer.x += 1
+
+class DigCommand(FarmerCommand):
     stuff: str
+
+    def action(self, farmer):
+        farmer.x += 1
 
 class FarmerUpdate(SQLModel):
     token: str
-    commands: list[MoveCommand | OtherCommand]
+    commands: list[MoveCommand | DigCommand]
